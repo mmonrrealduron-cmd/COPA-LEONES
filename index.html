@@ -525,8 +525,8 @@ document.getElementById('registroForm');
 const mensaje =
 document.getElementById('mensaje');
 
-const SCRIPT_URL =
-'https://script.google.com/macros/s/AKfycbwgrh9TQafvYl-Phs5t34aXq2vqLO75v44-zRa87ph4y4j4H5FSMgtBBTc1d9rjbg04/exec';
+const SCRIPT_URL = 
+    'https://script.google.com/macros/s/AKfycbzNQ5MjOFpBNx1UXyxWTrvhOkrlRt9gQSA_-y0rXsdhDOjVBEDWVgcdCAW3wMRNkgjm/exec';
 
 form.addEventListener('submit',async(e)=>{
 
@@ -542,53 +542,42 @@ form.addEventListener('submit',async(e)=>{
 
     });
 
-    const datos={
+   const formData = new FormData();
 
-        atleta:form.atleta.value,
+formData.append('atleta', form.atleta.value);
+formData.append('dojang', form.dojang.value);
+formData.append('entrenador', form.entrenador.value);
+formData.append('edad', form.edad.value);
+formData.append('cinta', form.cinta.value);
+formData.append('modalidades', modalidades.join(', '));
+formData.append('extra', form.extra.value);
+formData.append('whatsapp', form.whatsapp.value);
 
-        dojang:form.dojang.value,
+try{
 
-        entrenador:form.entrenador.value,
+    await fetch(SCRIPT_URL,{
 
-        edad:form.edad.value,
+        method:'POST',
 
-        cinta:form.cinta.value,
+        mode:'no-cors',
 
-        modalidades:modalidades.join(', '),
+        body:formData
 
-        extra:form.extra.value,
+    });
 
-        whatsapp:form.whatsapp.value
+    mensaje.innerHTML =
+    '✅ Registro enviado correctamente';
 
-    };
+    form.reset();
 
-    try{
+}catch(error){
 
-     await fetch(SCRIPT_URL, {
+    console.log(error);
 
-    method:'POST',
+    mensaje.innerHTML =
+    '❌ Error al registrar';
 
-    mode:'no-cors',
-
-    headers:{
-        'Content-Type':'application/json'
-    },
-
-    body:JSON.stringify(datos)
-
-});
-
-        mensaje.innerHTML=
-        '✅ Registro enviado correctamente';
-
-        form.reset();
-
-    }catch(error){
-
-        mensaje.innerHTML=
-        '❌ Error al registrar';
-
-    }
+}
 
 });
 
